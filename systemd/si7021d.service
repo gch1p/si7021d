@@ -1,0 +1,10 @@
+[Unit]
+Description=si7021 daemon
+After=network-online.target
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/local/bin/si7021d --bus 0 --host 0.0.0.0
+
+[Install]
+WantedBy=multi-user.target
