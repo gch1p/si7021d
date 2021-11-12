@@ -38,8 +38,12 @@ async def handle_client(reader, writer):
             break
 
         if request == 'read':
-            rh, temp = await si7021_read()
-            data = dict(humidity=rh, temp=temp)
+            try:
+                rh, temp = await asyncio.wait_for(si7021_read(), timeout=3)
+                data = dict(humidity=rh, temp=temp)
+            except asyncio.TimeoutError as e:
+                logger.exception(e)
+                data = dict(error='i2c call timed out')
         else:
             data = dict(error='invalid request')
 
