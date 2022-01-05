@@ -48,7 +48,10 @@ async def handle_client(reader, writer):
             data = dict(error='invalid request')
 
         writer.write((json.dumps(data) + '\r\n').encode('utf-8'))
-        await writer.drain()
+        try:
+            await writer.drain()
+        except ConnectionResetError:
+            pass
 
     writer.close()
 
